@@ -14,11 +14,13 @@
 {% block add_js %}
     <script src="{{ STATIC_PREFIX }}js/lib/jquery-explr-1.4.js"></script>
     <script src="{{ STATIC_PREFIX }}js/slideshow/contents.js"></script>
-
+    <script src="{{ STATIC_PREFIX }}js/lib/jquery-ui.min.js"></script>
+    {# <script src="{{ STATIC_PREFIX }}js/lib/jquery-ui-rotatable.min.js"></script> #}
+    <script src="{{ STATIC_PREFIX }}js/slideshow/content-composition.js"></script>
     {{ HOOK(H_SLIDESHOW_CONTENT_JAVASCRIPT) }}
 {% endblock %}
 
-{% block body_class %}view-content-edit edit-page{% endblock %}
+{% block body_class %}view-content-edit view-content-edit-composition edit-page{% endblock %}
 
 {% block page %}
     <div class="top-content">
@@ -44,7 +46,7 @@
     {% endif %}
 
     <div class="bottom-content">
-        <div class="page-content">
+        <div class="page-panel left-panel">
             <div class="inner dirview">
                 <div class="breadcrumb-container">
                     <ul class="breadcrumb">
@@ -68,33 +70,21 @@
 
                 <div class="horizontal">
                     <div class="form-holder">
-                        <form class="form" action="{{ url_for('slideshow_content_save', content_id=content.id) }}?path={{ working_folder_path }}" method="POST">
-
+                        <form class="form"
+                              action="{{ url_for('slideshow_content_save', content_id=content.id) }}?path={{ working_folder_path }}"
+                              method="POST">
                             <div class="form-group">
                                 <label for="content-edit-name">{{ l.slideshow_content_form_label_name }}</label>
                                 <div class="widget">
-                                    <input type="text" name="name" id="content-edit-name" required="required" value="{{ content.name }}" />
+                                    <input type="text" name="name" id="content-edit-name" required="required"
+                                           value="{{ content.name }}"/>
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <label for="content-edit-location">
-                                    {% if content.type == enum_content_type.EXTERNAL_STORAGE %}
-                                        {{ l.enum_content_type_external_storage_object_label }}
-                                    {% else %}
-                                        {{ l.slideshow_content_form_label_location }}
-                                    {% endif %}
-                                </label>
-                                <div class="widget vertical">
-                                    {% if content.type == enum_content_type.EXTERNAL_STORAGE %}
-                                        <input type="text" class="disabled" disabled value="{{ chroot_http_external_storage }}/" />
-                                    {% endif %}
+                            <div class="elements-holder">
+                                <h3 class="divide">Elements</h3>
+                                <div class="form-elements-list" id="elementList">
 
-                                    {% set location = content.location %}
-                                    {% if content.type == enum_content_type.YOUTUBE %}
-                                        {% set location = 'https://www.youtube.com/watch?v=' ~ content.location %}
-                                    {% endif %}
-                                    <input type="text" name="location" id="content-edit-location" value="{{ location }}" {% if not content.is_editable() %}disabled="disabled"{% endif %} />
                                 </div>
                             </div>
 
@@ -115,12 +105,40 @@
         </div>
 
 
-        <div class="page-panel right-panel">
-            <div class="iframe-wrapper">
-                 <iframe src="{{ url_for('player', preview_content_id=content.id) }}"></iframe>
+        <div class="page-content">
+            <div class="inner">
+                <div class="toolbar">
+                    <button id="presetGrid2x2">Grid 2x2</button>
+                    <button id="addElement">Add Element</button>
+                    <button id="removeAllElements">Remove All Elements</button>
+                </div>
+
+                <div class="screen-holder">
+                    <div class="screen" id="screen">
+                        <!-- Elements will be dynamically added here -->
+                    </div>
+                </div>
             </div>
         </div>
 
+
+        <div class="page-panel right-panel">
+            <div class="form-element-properties">
+                <form id="elementForm">
+                    <h3>Element Properties</h3>
+                    <label for="elem-x">X:</label>
+                    <input type="number" id="elem-x" name="elem-x"><br>
+                    <label for="elem-y">Y:</label>
+                    <input type="number" id="elem-y" name="elem-y"><br>
+                    <label for="elem-width">Width:</label>
+                    <input type="number" id="elem-width" name="elem-width"><br>
+                    <label for="elem-height">Height:</label>
+                    <input type="number" id="elem-height" name="elem-height"><br>
+                    <!--<label for="elem-rotate">Rotate (deg):</label>-->
+                    <!--<input type="number" id="elem-rotate" name="elem-rotate"><br>-->
+                </form>
+            </div>
+        </div>
     </div>
 
 

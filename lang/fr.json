@@ -292,6 +292,7 @@
   "enum_content_type_external_storage": "Stockage externe",
   "enum_content_type_external_storage_object_label": "Spécifiez un répertoire existant par rapport au chemin suivant",
   "enum_content_type_external_storage_flashdrive_label": "Chemin relatif à un périphérique amovible",
+  "enum_content_type_composition": "Composition",
   "enum_content_type_url": "URL",
   "enum_content_type_video": "Vidéo",
   "enum_content_type_picture": "Image",

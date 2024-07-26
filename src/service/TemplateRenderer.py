@@ -36,6 +36,7 @@ class TemplateRenderer:
             AUTH_ENABLED=self._model_store.variable().map().get('auth_enabled').as_bool(),
             last_pillmenu_slideshow=self._model_store.variable().map().get('last_pillmenu_slideshow').as_string(),
             last_pillmenu_configuration=self._model_store.variable().map().get('last_pillmenu_configuration').as_string(),
+            external_url=self._model_store.variable().map().get('external_url').as_string().strip('/'),
             last_pillmenu_fleet=self._model_store.variable().map().get('last_pillmenu_fleet').as_string(),
             last_pillmenu_security=self._model_store.variable().map().get('last_pillmenu_security').as_string(),
             track_created=self._model_store.user().track_user_created,

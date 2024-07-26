@@ -112,9 +112,13 @@ class ContentController(ObController):
             return abort(404)
 
         working_folder_path, working_folder = self.get_working_folder()
+        edit_view = 'slideshow/contents/edit.jinja.html'
+
+        if content.type == ContentType.COMPOSITION:
+            edit_view = 'slideshow/contents/edit-composition.jinja.html'
 
         return render_template(
-            'slideshow/contents/edit.jinja.html',
+            edit_view,
             content=content,
             working_folder_path=working_folder_path,
             working_folder=working_folder,

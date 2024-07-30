@@ -148,6 +148,7 @@ class PlayerController(ObController):
                             slide['position'] = position
                             slide['type'] = ContentType.guess_content_type_file(str(file.resolve())).value
                             slide['name'] = file.stem
+                            slide['delegate_duration'] = 1 if slide['type'] == ContentType.VIDEO.value else 0
                             slide['location'] = "{}/{}".format(
                                 self._model_store.content().resolve_content_location(content),
                                 file.name

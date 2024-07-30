@@ -362,7 +362,8 @@
     };
 
     const loadVideo = function(element, callbackReady, item) {
-        element.innerHTML = `<video ${previewMode ? 'controls' : ''}><source src=/${item.location} type="video/mp4" /></video>`;
+        const location = item.location.indexOf('http') === 0 ? item.location : `/${item.location}`;
+        element.innerHTML = `<video ${previewMode ? 'controls' : ''}><source src=${location} type="video/mp4" /></video>`;
         const video = element.querySelector('video');
         callbackReady(function() {});
 

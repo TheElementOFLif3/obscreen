@@ -1,0 +1,5 @@
+{
+  "plugin_title": "Dashboard",
+  "plugin_description": "Adds a dashboard reachable from navigation (has no use - developer demo plugin only)",
+  "menu_title": "Dashboard"
+}

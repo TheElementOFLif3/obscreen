@@ -1,0 +1,52 @@
+{% extends '::base.jinja.html' %}
+
+{% block page_title %}
+    {{ l.dashboard_menu_title }}
+{% endblock %}
+
+{% block add_css %}
+        <link rel="stylesheet" href="{{ STATIC_PLUGIN_PREFIX }}css/dashboard.css"/>
+{% endblock %}
+
+{% block add_js %}
+
+{% endblock %}
+
+{% block body_class %}view-dashboard{% endblock %}
+
+{% block pill_menu %}
+    {% with pills=[
+        {"name": l.dashboard_menu_title, "route": "dashboard", "icon": "fa-dashboard"},
+    ] %}
+        {% include '::core/pill-menu.jinja.html' %}
+    {% endwith %}
+{% endblock %}
+
+{% block page %}
+
+    <div class="top-content">
+        <div class="top-actions">
+
+            <button type="button" class="btn btn-neutral">
+                <i class="fa fa-hand"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="bottom-content">
+
+        <div class="page-content">
+            <div class="inner">
+                <div class="vertical">
+                    <h3>
+                        {{ l.dashboard_menu_title }}
+                    </h3>
+
+                    <p>Hello world ! You have {{ count_players }} player(s)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,5 @@
+<li class="{{ 'active' if request.url_rule.endpoint == 'dashboard' }}">
+    <a href="{{ url_for('dashboard') }}">
+        <i class="fa fa-dashboard"></i> {{ l.dashboard_menu_title }}
+    </a>
+</li>

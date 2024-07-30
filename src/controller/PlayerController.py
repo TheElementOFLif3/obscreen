@@ -1,6 +1,6 @@
 import json
 import logging
-import uuid
+import hashlib
 
 from datetime import datetime
 from typing import Optional, List, Dict
@@ -144,7 +144,7 @@ class PlayerController(ObController):
                     for file in mount_point_dir.iterdir():
                         if file.is_file() and not file.stem.startswith('.'):
                             slide = dict(slide)
-                            slide['id'] = str(uuid.uuid4())
+                            slide['id'] = hashlib.md5(str(file).encode('utf-8')).hexdigest()
                             slide['position'] = position
                             slide['type'] = ContentType.guess_content_type_file(str(file.resolve())).value
                             slide['name'] = file.stem

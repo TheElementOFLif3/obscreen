@@ -11,7 +11,7 @@ class CoreController(ObController):
         self._app.add_url_rule('/favicon.ico', 'favicon', self.favicon, methods=['GET'])
 
     def manifest(self):
-        with open("{}/manifest.jinja.json".format(self.get_template_folder()), 'r') as file:
+        with open("{}/manifest.jinja.json".format(self.get_template_dir()), 'r') as file:
             template_content = file.read()
 
         rendered_content = render_template_string(template_content)
@@ -19,4 +19,4 @@ class CoreController(ObController):
         return self._app.response_class(rendered_content, mimetype='application/json')
 
     def favicon(self):
-        return send_file("{}/favicon.ico".format(self.get_web_folder()), mimetype='image/x-icon')
+        return send_file("{}/favicon.ico".format(self.get_web_dir()), mimetype='image/x-icon')

@@ -20,3 +20,6 @@ var/run/*
 venv/
 node_modules
 tmp.py
+!/plugins/user/Dashboard/*
+data/www/plugins/*
+!data/www/plugins/.gitkeep

@@ -1,0 +1,19 @@
+<div class="context-menu">
+    <div class="inner">
+        <ul class="pills">
+            {{ HOOK(H_ROOT_PILL_ELEMENT_START) }}
+            {% for menu in pills %}
+                <li class="{{ 'active' if active_route == menu.route or active_route == menu.route_alt }}">
+                    {% set href = menu.url_for if menu.url_for else url_for(menu.route) %}
+                    <a href="{{ href }}">
+                        <span class="icon">
+                            <i class="fa {{ menu.icon }}"></i>
+                        </span>
+                        {{ menu.name }}
+                    </a>
+                </li>
+            {% endfor %}
+            {{ HOOK(H_ROOT_PILL_ELEMENT_END) }}
+        </ul>
+    </div>
+</div>

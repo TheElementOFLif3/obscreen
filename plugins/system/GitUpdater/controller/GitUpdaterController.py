@@ -43,6 +43,7 @@ class GitUpdaterController(ObController):
         elif os_name == "darwin":
             logging.warn('Git Updater doesn\'t supports macos dependency manager, install system dependencies manually with homebrew')
 
+        run_system_command(['git', 'config', '--global', '--add', 'safe.directory', get_working_directory()])
         run_system_command(['git', '-C', get_working_directory(), 'stash'])
         run_system_command(['git', '-C', get_working_directory(), 'checkout', 'master'])
         run_system_command(['git', '-C', get_working_directory(), 'pull'])

@@ -50,7 +50,7 @@ class PlayerController(ObController):
         polling_interval = int(request.args.get('polling', self._model_store.variable().get_one_by_name('polling_interval').eval()))
         slide_animation_speed = request.args.get('animation_speed', self._model_store.variable().get_one_by_name('slide_animation_speed').eval()).lower()
         slide_animation_entrance_effect = request.args.get('animation_effect', self._model_store.variable().get_one_by_name('slide_animation_entrance_effect').eval())
-        # slide_animation_exit_effect = request.args.get('slide_animation_exit_effect', self._model_store.variable().get_one_by_name('slide_animation_exit_effect').eval())
+        slide_animation_exit_effect = request.args.get('slide_animation_exit_effect', self._model_store.variable().get_one_by_name('slide_animation_exit_effect').eval())
 
         return render_template(
             'player/player.jinja.html',
@@ -59,6 +59,7 @@ class PlayerController(ObController):
             polling_interval=polling_interval,
             slide_animation_enabled=animation_enabled,
             slide_animation_entrance_effect=slide_animation_entrance_effect,
+            slide_animation_exit_effect=slide_animation_exit_effect,
             slide_animation_speed=slide_animation_speed,
             animation_speed_duration=animation_speed_duration,
         )

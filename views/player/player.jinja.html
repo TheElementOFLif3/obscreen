@@ -65,8 +65,7 @@
     const animation_speed_duration = {{ animation_speed_duration[slide_animation_speed] if slide_animation_enabled else 0 }};
     const animate_transitions = [
         "animate__{{ slide_animation_entrance_effect|default("fadeIn") }}",
-        "animate__none"
-        {#"animate__{{ slide_animation_exit_effect|default("none") }}"#}
+        "animate__{{ slide_animation_exit_effect|default("none") }}"
     ];
 
     // Slide flow management
@@ -85,6 +84,14 @@
     let notificationItemIndex = null;
 
     // Functions
+    const itemsLoadedProcess = function() {
+        if (items.loop.length === 1) {
+            const duplicatedItem = Object.assign({}, items.loop[0]);
+            duplicatedItem['id'] = duplicatedItem['id'] + 'bis';
+            items.loop.push(duplicatedItem);
+        }
+    };
+
     const itemCheck = setInterval(function() {
         if (previewMode) {
             return;
@@ -96,6 +103,7 @@
             }
         }).then(function(data) {
             items = data;
+            itemsLoadedProcess();
 
             if (needHardRefresh === null) {
                 needHardRefresh = items.hard_refresh_request;
@@ -203,6 +211,7 @@
     };
 
     const main = function() {
+        itemsLoadedProcess();
         setInterval(checkAndMoveNotifications, 1000);
         setTimeout(function() {
             if (items.loop.length === 0) {
@@ -296,13 +305,20 @@
         if (animate) {
             nextSlide.classList.add('animate__animated', animate_transitions[0], animate_speed);
             nextSlide.onanimationend = function() {
-                nextSlide.classList.remove(animate_transitions[0], animate_speed);
-                loadingNextSlide();
+                nextSlide.classList.remove(animate_transitions[0], animate_transitions[1], animate_speed);
+                if (animate_transitions[1] === 'animate__none') {
+                    loadingNextSlide();
+                }
             };
 
             curSlide.classList.add('animate__animated', animate_transitions[1], animate_speed);
             curSlide.onanimationend = function() {
-                curSlide.classList.remove(animate_transitions[1], animate_speed);
+                curSlide.classList.remove(animate_transitions[1], animate_transitions[0], animate_speed);
+                if (animate_transitions[1] !== 'animate__none') {
+                    setTimeout(function() {
+                        loadingNextSlide();
+                    }, 100);
+                }
             };
         } else {
             loadingNextSlide();
@@ -385,7 +401,9 @@
 
             if (element.innerHTML.match('<video>')) {
                 if (!previewMode) {
-                    video.play();
+                    setTimeout(function() {
+                         video.play();
+                    }, 1000);
                 }
             }
         }

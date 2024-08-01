@@ -84,6 +84,14 @@
     let notificationItemIndex = null;
 
     // Functions
+    const itemsLoadedProcess = function() {
+        if (items.loop.length === 1) {
+            const duplicatedItem = Object.assign({}, items.loop[0]);
+            duplicatedItem['id'] = duplicatedItem['id'] + 'bis';
+            items.loop.push(duplicatedItem);
+        }
+    };
+
     const itemCheck = setInterval(function() {
         if (previewMode) {
             return;
@@ -95,6 +103,7 @@
             }
         }).then(function(data) {
             items = data;
+            itemsLoadedProcess();
 
             if (needHardRefresh === null) {
                 needHardRefresh = items.hard_refresh_request;
@@ -202,6 +211,7 @@
     };
 
     const main = function() {
+        itemsLoadedProcess();
         setInterval(checkAndMoveNotifications, 1000);
         setTimeout(function() {
             if (items.loop.length === 0) {
@@ -391,7 +401,9 @@
 
             if (element.innerHTML.match('<video>')) {
                 if (!previewMode) {
-                    video.play();
+                    setTimeout(function() {
+                         video.play();
+                    }, 1000);
                 }
             }
         }

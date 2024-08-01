@@ -7,9 +7,9 @@ out/
 data/uploads/*
 !data/uploads/.gitkeep
 data/db/*
-!/data/db/.gitkeep
-/plugins/user/*
-!/plugins/user/.gitkeep
+!data/db/.gitkeep
+plugins/user/*
+!plugins/user/.gitkeep
 *.lock
 __pycache__/
 *.log
@@ -20,8 +20,8 @@ var/run/*
 venv/
 node_modules
 tmp.py
-!/plugins/user/Dashboard
+!plugins/user/Dashboard
 data/www/plugins/*
 !data/www/plugins/.gitkeep
-/var/run/storage/*
-!/var/run/storage/.gitkeep
+var/run/storage/*
+!var/run/storage/.gitkeep

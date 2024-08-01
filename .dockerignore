@@ -1,3 +1,4 @@
+.DS_Store
 .idea
 *.iws
 *.iml
@@ -14,5 +15,13 @@ __pycache__/
 *.log
 var/run/*
 !var/run/.gitkeep
+*.swp
 .env
 venv/
+node_modules
+tmp.py
+!/plugins/user/Dashboard
+data/www/plugins/*
+!data/www/plugins/.gitkeep
+/var/run/storage/*
+!/var/run/storage/.gitkeep

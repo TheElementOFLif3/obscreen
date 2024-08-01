@@ -23,3 +23,5 @@ tmp.py
 !/plugins/user/Dashboard
 data/www/plugins/*
 !data/www/plugins/.gitkeep
+/var/run/storage/*
+!/var/run/storage/.gitkeep

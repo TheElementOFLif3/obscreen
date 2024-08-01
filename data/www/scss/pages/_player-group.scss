@@ -75,11 +75,26 @@
 						}
 					}
 
-
 					.preview-holder {
+						position: relative;
+
 						.form-group {
 							flex-grow: 0;
 							margin-bottom: 0;
+						}
+
+						.hover-only {
+							display: none;
+						}
+
+						&:hover {
+							.hover-only {
+								display: flex;
+								position: absolute;
+								&:hover {
+									background: $gkscaleC;
+								}
+							}
 						}
 					}
 

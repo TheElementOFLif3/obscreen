@@ -12,9 +12,7 @@ services:
       - PORT=5000
       - PORT_HTTP_EXTERNAL_STORAGE=5001
     volumes:
-      - ./data/db:/app/data/db
-      - ./data/uploads:/app/data/uploads
-      - ./var/run/storage:/app/var/run/storage
+      - ./:/app/
     ports:
       - 5000:5000
       - 5001:5001

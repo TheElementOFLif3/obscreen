@@ -59,6 +59,31 @@ def camel_to_snake(camel: str) -> str:
     return CAMEL_CASE_TO_SNAKE_CASE_PATTERN.sub('_', camel).lower()
 
 
+def str_datetime_to_cron(datetime_str: str) -> str:
+    print(datetime_str)
+    datetime_obj = datetime.strptime(datetime_str, '%Y-%m-%d %H:%M')
+    return "{} {} {} {} * {}".format(
+        datetime_obj.minute,
+        datetime_obj.hour,
+        datetime_obj.day,
+        datetime_obj.month,
+        datetime_obj.year
+    )
+
+
+def str_weekdaytime_to_cron(weekday: int, time_str: str) -> str:
+    if weekday < 1 or weekday > 7:
+        raise ValueError('Weekday must be between [1-7]')
+
+    time_obj = datetime.strptime(time_str, '%H:%M').time()
+
+    return "{} {} * * {}".format(
+        time_obj.minute,
+        time_obj.hour,
+        weekday
+    )
+
+
 def is_cron_in_datetime_moment(expression: str) -> bool:
     pattern = re.compile(r'^(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+\*\s+(\d+)$')
     return bool(pattern.match(expression))

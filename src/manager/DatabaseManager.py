@@ -215,6 +215,7 @@ class DatabaseManager:
             "DELETE FROM settings WHERE name = 'playlist_enabled'",
             "UPDATE fleet_player_group SET slug = id WHERE slug = '' or slug is null",
             "UPDATE content SET uuid = id WHERE uuid = '' or uuid is null",
+            "UPDATE slide SET uuid = id WHERE uuid = '' or uuid is null",
         ]
 
         for query in queries:

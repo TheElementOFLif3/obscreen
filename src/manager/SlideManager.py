@@ -16,6 +16,7 @@ class SlideManager(ModelManager):
 
     TABLE_NAME = "slides"
     TABLE_MODEL = [
+        "uuid CHAR(255)",
         "enabled INTEGER DEFAULT 0",
         "delegate_duration INTEGER DEFAULT 0",
         "is_notification INTEGER DEFAULT 0",
@@ -136,7 +137,7 @@ class SlideManager(ModelManager):
         for slide_id, slide_position in positions.items():
             self._db.update_by_id(self.TABLE_NAME, slide_id, {"position": slide_position})
 
-    def update_form(self, id: int, duration: Optional[int] = None, content_id: Optional[int] = None, delegate_duration: Optional[bool] = None, is_notification: bool = False, cron_schedule: Optional[str] = '', cron_schedule_end: Optional[str] = '', enabled: Optional[bool] = None) -> Optional[Slide]:
+    def update_form(self, id: int, duration: Optional[int] = None, content_id: Optional[int] = None, delegate_duration: Optional[bool] = None, is_notification: Optional[bool] = None, cron_schedule: Optional[str] = '', cron_schedule_end: Optional[str] = '', enabled: Optional[bool] = None, position: Optional[int] = None) -> Optional[Slide]:
         slide = self.get(id)
 
         if not slide:
@@ -145,9 +146,10 @@ class SlideManager(ModelManager):
         form = {
             "duration": duration if duration else slide.duration,
             "content_id": content_id if content_id else slide.content_id,
+            "position": position if isinstance(position, int) else slide.position,
             "enabled": enabled if isinstance(enabled, bool) else slide.enabled,
             "delegate_duration": delegate_duration if isinstance(delegate_duration, bool) else slide.delegate_duration,
-            "is_notification": True if is_notification else False,
+            "is_notification": is_notification if isinstance(is_notification, bool) else slide.is_notification,
             "cron_schedule": get_optional_string(cron_schedule),
             "cron_schedule_end": get_optional_string(cron_schedule_end)
         }
@@ -156,7 +158,7 @@ class SlideManager(ModelManager):
         self.post_update(id)
         return self.get(id)
 
-    def add_form(self, slide: Union[Slide, Dict]) -> None:
+    def add_form(self, slide: Union[Slide, Dict]) -> Slide:
         form = slide
 
         if not isinstance(slide, dict):
@@ -165,6 +167,7 @@ class SlideManager(ModelManager):
 
         self._db.add(self.TABLE_NAME, self.pre_add(form))
         self.post_add(slide.id)
+        return self.get_one_by(query="uuid = '{}'".format(slide.uuid))
 
     def delete(self, id: int) -> None:
         slide = self.get(id)

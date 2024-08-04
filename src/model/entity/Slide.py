@@ -1,5 +1,6 @@
 import json
 import time
+import uuid
 
 from typing import Optional, Union
 from src.util.utils import str_to_enum
@@ -7,7 +8,8 @@ from src.util.utils import str_to_enum
 
 class Slide:
 
-    def __init__(self, playlist_id: Optional[int] = None, content_id: Optional[int] = None, delegate_duration=False, duration: int = 3, is_notification: bool = False, enabled: bool = False, position: int = 999, id: Optional[int] = None, cron_schedule: Optional[str] = None, cron_schedule_end: Optional[str] = None, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
+    def __init__(self, uuid: str = '', playlist_id: Optional[int] = None, content_id: Optional[int] = None, delegate_duration=False, duration: int = 3, is_notification: bool = False, enabled: bool = False, position: int = 999, id: Optional[int] = None, cron_schedule: Optional[str] = None, cron_schedule_end: Optional[str] = None, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
+        self._uuid = uuid if uuid else self.generate_and_set_uuid()
         self._id = id if id else None
         self._playlist_id = playlist_id
         self._content_id = content_id
@@ -23,9 +25,22 @@ class Slide:
         self._created_at = int(created_at if created_at else time.time())
         self._updated_at = int(updated_at if updated_at else time.time())
 
+    def generate_and_set_uuid(self) -> str:
+        self._uuid = str(uuid.uuid4())
+
+        return self._uuid
+
     @property
     def id(self) -> Optional[int]:
         return self._id
+
+    @property
+    def uuid(self) -> str:
+        return self._uuid
+
+    @uuid.setter
+    def uuid(self, value: str):
+        self._uuid = value
 
     @property
     def created_by(self) -> str:
@@ -134,6 +149,7 @@ class Slide:
     def __str__(self) -> str:
         return f"Slide(" \
                f"id='{self.id}',\n" \
+               f"uuid='{self.uuid}',\n" \
                f"enabled='{self.enabled}',\n" \
                f"is_notification='{self.is_notification}',\n" \
                f"duration='{self.duration}',\n" \
@@ -160,6 +176,7 @@ class Slide:
     def to_dict(self) -> dict:
         slide = {
             "id": self.id,
+            "uuid": self.uuid,
             "enabled": self.enabled,
             "is_notification": self.is_notification,
             "position": self.position,

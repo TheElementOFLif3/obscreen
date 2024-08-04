@@ -32,7 +32,7 @@ class ContentController(ObController):
         self._app.add_url_rule('/slideshow/content/upload-bulk', 'slideshow_content_upload_bulk', self._auth(self.slideshow_content_upload_bulk), methods=['POST'])
         self._app.add_url_rule('/slideshow/content/delete-bulk-explr', 'slideshow_content_delete_bulk_explr', self._auth(self.slideshow_content_delete_bulk_explr), methods=['GET'])
 
-    def get_working_folder(self):
+    def get_folder_context(self):
         working_folder_path = request.args.get('path', None)
         working_folder = None
 
@@ -47,7 +47,7 @@ class ContentController(ObController):
 
     def slideshow_content_list(self):
         self._model_store.variable().update_by_name('last_pillmenu_slideshow', 'slideshow_content_list')
-        working_folder_path, working_folder = self.get_working_folder()
+        working_folder_path, working_folder = self.get_folder_context()
         slides_with_content = self._model_store.slide().get_all_indexed(attribute='content_id', multiple=True)
 
         return render_template(
@@ -64,7 +64,7 @@ class ContentController(ObController):
         )
 
     def slideshow_content_add(self):
-        working_folder_path, working_folder = self.get_working_folder()
+        working_folder_path, working_folder = self.get_folder_context()
         route_args = {
             "path": working_folder_path,
         }
@@ -86,7 +86,7 @@ class ContentController(ObController):
         return redirect(url_for('slideshow_content_list', **route_args))
 
     def slideshow_content_upload_bulk(self):
-        working_folder_path, working_folder = self.get_working_folder()
+        working_folder_path, working_folder = self.get_folder_context()
 
         for key in request.files:
             files = request.files.getlist(key)
@@ -111,7 +111,7 @@ class ContentController(ObController):
         if not content:
             return abort(404)
 
-        working_folder_path, working_folder = self.get_working_folder()
+        working_folder_path, working_folder = self.get_folder_context()
 
         return render_template(
             'slideshow/contents/edit.jinja.html',
@@ -123,7 +123,7 @@ class ContentController(ObController):
         )
 
     def slideshow_content_save(self, content_id: int = 0):
-        working_folder_path, working_folder = self.get_working_folder()
+        working_folder_path, working_folder = self.get_folder_context()
         content = self._model_store.content().get(content_id)
 
         if not content:
@@ -139,7 +139,7 @@ class ContentController(ObController):
         return redirect(url_for('slideshow_content_edit', content_id=content_id, saved=1))
 
     def slideshow_content_delete(self):
-        working_folder_path, working_folder = self.get_working_folder()
+        working_folder_path, working_folder = self.get_folder_context()
         error_tuple = self.delete_content_by_id(request.args.get('id'))
         route_args = {
             "path": working_folder_path,
@@ -151,7 +151,7 @@ class ContentController(ObController):
         return redirect(url_for('slideshow_content_list', **route_args))
 
     def slideshow_content_rename(self):
-        working_folder_path, working_folder = self.get_working_folder()
+        working_folder_path, working_folder = self.get_folder_context()
         self._model_store.content().update_form(
             id=request.form['id'],
             name=request.form['name'],
@@ -182,7 +182,7 @@ class ContentController(ObController):
         return redirect(url_for('slideshow_content_list', path=path))
 
     def slideshow_content_folder_add(self):
-        working_folder_path, working_folder = self.get_working_folder()
+        working_folder_path, working_folder = self.get_folder_context()
 
         self._model_store.folder().add_folder(
             entity=FolderEntity.CONTENT,
@@ -193,7 +193,7 @@ class ContentController(ObController):
         return redirect(url_for('slideshow_content_list', path=working_folder_path))
 
     def slideshow_content_folder_rename(self):
-        working_folder_path, working_folder = self.get_working_folder()
+        working_folder_path, working_folder = self.get_folder_context()
         self._model_store.folder().rename_folder(
             folder_id=request.form['id'],
             name=request.form['name'],
@@ -202,7 +202,7 @@ class ContentController(ObController):
         return redirect(url_for('slideshow_content_list', path=working_folder_path))
 
     def slideshow_content_folder_move(self):
-        working_folder_path, working_folder = self.get_working_folder()
+        working_folder_path, working_folder = self.get_folder_context()
         entity_ids = request.form['entity_ids'].split(',')
         folder_ids = request.form['folder_ids'].split(',')
 
@@ -225,7 +225,7 @@ class ContentController(ObController):
         return redirect(url_for('slideshow_content_list', path=working_folder_path))
 
     def slideshow_content_folder_delete(self):
-        working_folder_path, working_folder = self.get_working_folder()
+        working_folder_path, working_folder = self.get_folder_context()
         error_tuple = self.delete_folder_by_id(request.args.get('id'))
         route_args = {
             "path": working_folder_path,
@@ -245,7 +245,7 @@ class ContentController(ObController):
         return redirect(self._model_store.content().resolve_content_location(content))
 
     def slideshow_content_delete_bulk_explr(self):
-        working_folder_path, working_folder = self.get_working_folder()
+        working_folder_path, working_folder = self.get_folder_context()
         entity_ids = request.args.get('entity_ids', '').split(',')
         folder_ids = request.args.get('folder_ids', '').split(',')
         route_args_dict = {"path": working_folder_path}

@@ -2,7 +2,7 @@ import os
 import time
 from waitress import serve
 
-from flask import Flask, send_from_directory, redirect, url_for
+from flask import Flask, send_from_directory, redirect, url_for, request, jsonify, make_response
 from flask_login import LoginManager, current_user
 
 from src.manager.UserManager import UserManager
@@ -19,6 +19,8 @@ from src.controller.SysinfoController import SysinfoController
 from src.controller.SettingsController import SettingsController
 from src.controller.CoreController import CoreController
 from src.constant.WebDirConstant import WebDirConstant
+from src.exceptions.HttpClientException import HttpClientException
+from plugins.system.CoreApi.exception.ContentPathMissingException import ContentPathMissingException
 
 
 class WebServer:
@@ -119,7 +121,23 @@ class WebServer:
             return self._template_renderer.get_view_globals()
 
     def _setup_web_errors(self) -> None:
-        @self._app.errorhandler(404)
-        def not_found(e):
-            return send_from_directory(self.get_template_dir(), 'core/error404.html'), 404
+        def handle_error(error):
+            if request.headers.get('Content-Type') == 'application/json':
+                response = jsonify({
+                    'error': {
+                        'code': error.code,
+                        'message': error.description
+                    }
+                })
+                return make_response(response, error.code)
+
+            if error.code == 404:
+                return send_from_directory(self.get_template_dir(), 'core/error404.html'), 404
+
+            return error
+
+        self._app.register_error_handler(400, handle_error)
+        self._app.register_error_handler(404, handle_error)
+        self._app.register_error_handler(409, handle_error)
+        self._app.register_error_handler(HttpClientException, handle_error)
 

@@ -46,6 +46,10 @@ class ObPlugin(abc.ABC):
     def use_hooks_registrations(self) -> List[HookRegistration]:
         pass
 
+    @abc.abstractmethod
+    def get_version(self) -> str:
+        pass
+
     def get_directory(self) -> Optional[str]:
         return self._plugin_dir
 

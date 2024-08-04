@@ -81,7 +81,7 @@ class NodePlayerManager(ModelManager):
         for node_player_id, edits in edits_node_players.items():
             self._db.update_by_id(self.TABLE_NAME, node_player_id, edits)
 
-    def get_node_players(self, group_id: Optional[int] = None, folder_id: Optional[id] = None, sort: Optional[str] = None, ascending=False) -> List[NodePlayer]:
+    def get_node_players(self, group_id: Optional[int] = None, folder_id: Optional[int] = None, sort: Optional[str] = None, ascending=False) -> List[NodePlayer]:
         query = " 1=1 "
 
         if group_id:

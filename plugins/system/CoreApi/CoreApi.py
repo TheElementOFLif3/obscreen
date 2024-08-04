@@ -6,13 +6,13 @@ from src.model.enum.HookType import HookType
 from src.model.hook.HookRegistration import HookRegistration
 
 
-class Dashboard(ObPlugin):
+class CoreApi(ObPlugin):
 
     def get_version(self) -> str:
         return '1.0'
 
     def use_id(self):
-        return 'dashboard'
+        return 'core_api'
 
     def use_title(self):
         return self.translate('plugin_title')
@@ -24,9 +24,4 @@ class Dashboard(ObPlugin):
         return []
 
     def use_hooks_registrations(self) -> List[HookRegistration]:
-        return [
-            super().add_functional_hook_registration(hook=HookType.H_ROOT_NAV_ELEMENT_START, priority=10, function=self.hook_navigation),
-        ]
-
-    def hook_navigation(self) -> str:
-        return self.render_view('@hook_navigation.jinja.html')
+        return []

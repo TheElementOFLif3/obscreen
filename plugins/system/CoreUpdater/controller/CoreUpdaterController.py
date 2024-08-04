@@ -10,10 +10,10 @@ from src.util.utils import run_system_command, sudo_run_system_command, get_work
 from src.Application import Application
 
 
-class GitUpdaterController(ObController):
+class CoreUpdaterController(ObController):
 
     def register(self):
-        self._app.add_url_rule('/git-updater/update/now', 'git_updater_update_now', self._auth(self.update_now), methods=['GET'])
+        self._app.add_url_rule('/core-updater/update/now', 'core_updater_update_now', self._auth(self.update_now), methods=['GET'])
 
     def update_now(self):
         debug = self._model_store.config().map().get('debug')

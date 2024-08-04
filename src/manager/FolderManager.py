@@ -110,7 +110,7 @@ class FolderManager(ModelManager):
         for folder_id, edits in edits_folders.items():
             self._db.update_by_id(self.TABLE_NAME, folder_id, edits)
 
-    def get_folders(self, parent_id: Optional[id] = None) -> List[Folder]:
+    def get_folders(self, parent_id: Optional[int] = None) -> List[Folder]:
         query = " 1=1 "
 
         if parent_id:
@@ -267,3 +267,9 @@ class FolderManager(ModelManager):
 
     def count_subfolders_for_folder(self, folder_id: int) -> int:
         return len(self.get_folders(parent_id=folder_id))
+
+    @staticmethod
+    def is_root_drive(path: str):
+        clean_path = path.strip('/')
+        clean_root_path = FOLDER_ROOT_PATH.strip('/')
+        return path == '/' or clean_path == clean_root_path

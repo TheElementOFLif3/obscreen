@@ -6,7 +6,7 @@
     "watch": "vite"
   },
   "devDependencies": {
-    "vite": "^5.3.1",
+    "vite": "^5.3.6",
     "sass": "^1.77.6"
   }
 }
